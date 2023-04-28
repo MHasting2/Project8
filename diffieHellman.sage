@@ -29,11 +29,11 @@ def Alice_Key(p,a,B):
 def Bob_Key(p,b,A):
     return power_mod(A, b, p)
     
-peegee = param_gen(20)
-p = peegee[0]
-g = peegee[1]
+params = param_gen(20)
+p = params[0]
+g = params[1]
 ali = Alice(p,g)
 bob = Bob(p,g)
 
-print("kAlice: " + str(Alice_Key(bob[0], ali[1], p)))
-print("kBob: " + str(Alice_Key(ali[0], bob[1], p)))
+print("kAlice =", Alice_Key(p, ali[1], bob[0]))
+print("kBob =", Bob_Key(p, bob[1], ali[0]))

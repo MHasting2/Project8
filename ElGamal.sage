@@ -17,9 +17,20 @@ def key_gen(p,a):
 #Pre: p and a are the returned by parem_gen. A is your private key
 #Post: returns r and S as defined in class and in McAndrew
 def sign(p, a, A, msg):
-    r = randint(1, p-1)  
-    h = txt_to_num(msg)
-    S = (h - A*r) * power_mod(r, -1, p-1) % (p-1) 
+    k = p + 1
+    #print(k)
+    #print(p-1)
+    #print(gcd(k,(p-1)))
+    #if(k > (p-1)):
+     #   print(True)
+    #if(gcd(k,(p-1)) != 1):
+     #   print(Tru)
+    while (k > (p-1) and gcd(k,(p-1)) != 1):
+        k = randint(1, p-1)
+        
+    r = power_mod(a, k, p) 
+    ch = txt_to_num(msg)
+    S  = inverse_mod(k,p) * (ch - abs(A)*r) % (p-1)
     return r, S
     
 
@@ -66,5 +77,18 @@ def main():
     print(out[1]) #s
     print(params[0]) #p
     print(params[1]) #a
+    
+    a = params[1]
+    p = params[0]
+    B = keys[1]
+    r = out[0]
+    S = out[1]
+    
+    vOne = power_mod(a,m,p)
+    #vTwo = power_mod(B,r,p) * power_mod(r,S,p)
+    
+    vTwo = ((B^r) * (r^S)) % p
+    
+    print(vOne == vTwo)
 
 main()

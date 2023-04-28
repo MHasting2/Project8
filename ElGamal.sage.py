@@ -22,9 +22,20 @@ def key_gen(p,a):
 #Pre: p and a are the returned by parem_gen. A is your private key
 #Post: returns r and S as defined in class and in McAndrew
 def sign(p, a, A, msg):
-    r = randint(_sage_const_1 , p-_sage_const_1 )  
-    h = txt_to_num(msg)
-    S = (h - A*r) * power_mod(r, -_sage_const_1 , p-_sage_const_1 ) % (p-_sage_const_1 ) 
+    k = p + _sage_const_1 
+    #print(k)
+    #print(p-1)
+    #print(gcd(k,(p-1)))
+    #if(k > (p-1)):
+     #   print(True)
+    #if(gcd(k,(p-1)) != 1):
+     #   print(Tru)
+    while (k > (p-_sage_const_1 ) and gcd(k,(p-_sage_const_1 )) != _sage_const_1 ):
+        k = randint(_sage_const_1 , p-_sage_const_1 )
+        
+    r = power_mod(a, k, p) 
+    ch = txt_to_num(msg)
+    S  = inverse_mod(k,p) * (ch - abs(A)*r) % (p-_sage_const_1 )
     return r, S
     
 
@@ -71,6 +82,19 @@ def main():
     print(out[_sage_const_1 ]) #s
     print(params[_sage_const_0 ]) #p
     print(params[_sage_const_1 ]) #a
+    
+    a = params[_sage_const_1 ]
+    p = params[_sage_const_0 ]
+    B = keys[_sage_const_1 ]
+    r = out[_sage_const_0 ]
+    S = out[_sage_const_1 ]
+    
+    vOne = power_mod(a,m,p)
+    #vTwo = power_mod(B,r,p) * power_mod(r,S,p)
+    
+    vTwo = ((B**r) * (r**S)) % p
+    
+    print(vOne == vTwo)
 
 main()
 
